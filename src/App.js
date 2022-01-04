@@ -1,24 +1,19 @@
-import logo from './logo.svg';
-import './App.css';
-
+// if version 6 of react-router-dom doesnt work, use version 5. npm install react-router-dom@5.2.0
+import React from "react";
+import { BrowserRouter, Route } from "react-router-dom";
+import Home from "./Home";
+import About from "./About";
+import Contact from "./Contact";
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+      <BrowserRouter>
+        <Route exact path="/" component={Home} />{" "}
+        {/*exact allows us to be on exact page , path allows us to go to that page*/}
+        <Route exact path="/about" component={About} />
+        <Route exact path="/contact" component={Contact} />
+      </BrowserRouter>
+    </>
   );
 }
 
