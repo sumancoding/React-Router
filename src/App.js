@@ -1,40 +1,52 @@
 // if version 6 of react-router-dom doesnt work, use version 5. npm install react-router-dom@5.2.0
 import React from "react";
-import { BrowserRouter, Route, Switch, Redirect } from "react-router-dom";
-import Home from "./Home";
-import About from "./About";
-import Contact from "./Contact";
-import NavBar from "./NavBar";
-import Error from "./Error";
-import Post from "./Post";
-import DashBoard from "./DashBoard";
-import Button from "./Button";
+//BrowserRouter connects with Browser URL
+import { BrowserRouter, Route, Routes, Navigate } from "react-router-dom";
+import Home from "./components/pages/Home";
+import About from "./components/pages/About";
+import Contact from "./components/pages/Contact";
+import NavBar from "./components/NavBar";
+import DashBoard from "./components/pages/DashBoard";
+import Login from "./components/pages/Login";
+import Logout from "./components/pages/Logout";
+
 function App() {
-  let isLogged = false;
+  let isLogged = true; //This is for conditional rebdering. User is not logged in
+  let data = {
+    st: "User Not Logged in ",
+  };
   return (
     <>
       <BrowserRouter>
         <NavBar />
-        <Switch>
-          <Route exact path="/" component={Home} />{" "}
-          {/*exact allows us to be on exact page , path allows us to go to that page*/}
-          <Route exact path="/about" component={About} />
-          {/*<Route exact path="/contact" component={Contact} />*/}
-          <Route exact path="/post/:category" component={Post} />{" "}
-          {/*: category created dynnamic pages*/}
-          <Route exact path="/post/:category/:id" component={Post} />
-          <Route exact path="/contact">
-            {" "}
-            {/* Another way */}
-            <Contact company_name="Malla & Malla Enterprise" />
-          </Route>
-          <Route exact path="/dashboard" component={DashBoard} />
-          <Route exact path="/login">
-            {isLogged ? <Redirect to="./dashboard" /> : <Home />}
-          </Route>
-          <Route component={Error} />{" "}
-          {/* Error wil be handled by component only. Error should be at the end*/}
-        </Switch>
+        <Routes>
+          {/*<Route path="/" element={<h1> Hello Suman </h1>} />. Roue Path defines a route */}
+          <Route path="/" element={<Home />} />
+          <Route path="/about" element={<About />} />
+          <Route path="/contact/:category" element={<Contact />} />
+          {/* You can create multiples*/}
+          <Route path="/contact/:category/:id" element={<Contact />} />
+          {/* :category allowed us to create dynamic, whatever we type is valid*/}
+          <Route
+            path="/dashboard"
+            element={
+              isLogged ? (
+                <DashBoard />
+              ) : (
+                <Navigate to="/login" replace state={data} />
+              )
+            }
+          />{" "}
+          {/* State prop here allows to send data var to login. This requires access ia useLocation*/}
+          {/* Navigate is imported from react-dom. If the consition is not true, then it directs to login page. */}
+          <Route path="/login" element={<Login />} />
+          <Route path="/logout" element={<Logout />} />
+          <Route
+            path="*"
+            element={<h1> Error 404 Page not Found !!!!</h1>}
+          />{" "}
+          {/*No Match Url- 404 not found*. Put this at last */}
+        </Routes>
       </BrowserRouter>
     </>
   );
